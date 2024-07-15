@@ -14,7 +14,9 @@ const Board = () => {
                         {id: 6, mostrar: false, value: 5},
                         {id: 7, mostrar: false, value: 5},
                         {id: 8, mostrar: false, value: 2},
-                        {id: 9, mostrar: false, value: 3}]
+                        {id: 9, mostrar: false, value: 3},
+                        {id: 10, mostrar: false, value: 9},
+                        {id: 11, mostrar: false, value: 9},]
     
 
     const [cards, setCards] = useState(objectCards);
@@ -33,14 +35,14 @@ const Board = () => {
             } else {
                 const backCards = cardMostradas;
                 backCards.forEach(e => e.mostrar = false);
-                const updatedCards = cards.map(e => {
-                    if (backCards.find(i => i.id = e.id))
+                const updatedCards = cards.map(i => {
+                    if (backCards.includes(e=> e.id = i.id))
                     {
-                        e.mostrar = false;
+                        i.mostrar = false;
                     }
-                    return e
+                    return i
                 })
-                setTimeout(() => setCards(updatedCards), 100000 )
+                setCards(updatedCards)
             }
             
             setCardMostradas([]);
