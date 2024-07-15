@@ -1,0 +1,29 @@
+.card {
+    width: 200px;
+    height: 100px;
+    background-color: #428bca;
+    color: #000000;
+    border-radius: 10px;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size:xx-large;
+
+  }
+
+  .oculto{
+    visibility: hidden;
+  }
+  
+  .card:hover {
+    background-color: #4a93d3;
+  }
+  
+  .card p,
+  h2 {
+    font-size: large;
+    margin: 0;
+    padding: 0;
+  }
