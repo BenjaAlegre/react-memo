@@ -23,7 +23,7 @@ const Board = () => {
     const [cardMostradas, setCardMostradas ] = useState([]);
     const [cardFinish, setCardFinish ] = useState([]);
     
-    console.log(cards);
+    console.log({cards});
     console.log({cardMostradas});
     console.log({cardFinish});
 
