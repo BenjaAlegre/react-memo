@@ -1,85 +1,109 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 import "./board.css";
-import { compareCards } from "../utils/memo";
+import { generateRandomColorArray, verifyCards } from "../utils/logicaSimon";
 
 const Board = () => {
 
-    const objectCards =  [{id: 0, mostrar: false, value: 1},
-                        {id: 1, mostrar: false, value: 1},
-                        {id: 2, mostrar: false, value: 2},
-                        {id: 3, mostrar: false, value: 3},
-                        {id: 4, mostrar: false, value: 4},
-                        {id: 5, mostrar: false, value: 4},
-                        {id: 6, mostrar: false, value: 5},
-                        {id: 7, mostrar: false, value: 5},
-                        {id: 8, mostrar: false, value: 2},
-                        {id: 9, mostrar: false, value: 3},
-                        {id: 10, mostrar: false, value: 9},
-                        {id: 11, mostrar: false, value: 9},]
-    
+    const objectCards =  [{id: 0, brillar: false, value: "red"},
+                        {id: 1, brillar: false, value: "yellow"},
+                        {id: 2, brillar: false, value: "green"},
+                        {id: 3, brillar: false, value: "blue"},
+                        {id: 4, brillar: false, value: "magenta"},
+                      ]
 
     const [cards, setCards] = useState(objectCards);
-    const [cardMostradas, setCardMostradas ] = useState([]);
-    const [cardFinish, setCardFinish ] = useState([]);
-    
+    const [cardsHighlight, setCardsHighlight] = useState(objectCards);
+
+    const [cardsGame, setCardsGame ] = useState([]);
+    const [cardsClicked, setCardClicked] = useState([]);
+    const [puntos, setPuntos] = useState([0]);
+     
+ 
     console.log({cards});
-    console.log({cardMostradas});
-    console.log({cardFinish});
+    console.log({cardsGame});
+    console.log({cardsClicked});
+    console.log(puntos);
 
-    useEffect(() => {
-        if (cardMostradas.length === 2) {
-            if (compareCards(cardMostradas)) {
-
-                setCardFinish(prevFinish => [...prevFinish, ...cardMostradas]);
-            } else {
-                const backCards = cardMostradas;
-                backCards.forEach(e => e.mostrar = false);
-                const updatedCards = cards.map(i => {
-                    if (backCards.includes(e=> e.id = i.id))
-                    {
-                        i.mostrar = false;
-                    }
-                    return i
-                })
-                setCards(updatedCards)
-            }
-            
-            setCardMostradas([]);
-        }
-    }, [cardMostradas]);
-
-
-    
     function handleClick(i) {
         const cardClicked = cards[i];
-        if (cardMostradas.length < 2) {
-            setCardMostradas(prevMostradas => [...prevMostradas, cardClicked]);
-        }
-        const newCards = cards;
-        newCards[i].mostrar = true;
-        setCards(newCards);
+        console.log(cardClicked);
+
+        setCardClicked( prevClicked => [...prevClicked, cardClicked]);
+
+    }
+
+    function startGame() {
+        const patron =  generateRandomColorArray(objectCards);
+        console.log(patron);
         
+        const cardsPlay = patron.map(color => {
+            return cards.find(card => card.value === color);
+          }).filter(card => card !== undefined);
+
+        console.log(cardsPlay);
+      
+        setCardsGame(cardsPlay);
+
+        let index = 0;
+        const interval = setInterval(() => {
+            if (index < cardsPlay.length) {
+                const newCards = cards.map(card => {
+                    if (card.id === cardsPlay[index].id) {
+                        return { ...card, brillar: true };
+                    }
+                    return card;
+                });
+                setCardsHighlight(newCards);
+                
+                setTimeout(() => {
+                    setCardsHighlight(cards.map(card => ({ ...card, brillar: false })));
+                }, 1000);
+                index++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 2000);
+        
+    }
+
+    function clickVerifyCards() {
+        console.log(verifyCards(cardsGame, cardsClicked));
+        if(verifyCards(cardsGame, cardsClicked)) {
+            let newPoints = puntos;
+            newPoints++ 
+            setPuntos(newPoints)
+        }
+        setCardClicked([]);
+
     }
 
 
     return (
-        <div>
+        <div className="gameBoard">
+            <div className="container">
+                <button className="buttonGame" onClick={startGame}>Empieza el juego</button>
+                <button className="buttonGame" onClick={clickVerifyCards}>Verificar</button>
+                <div className="points">Puntos: {puntos} </div>
+            </div>
+            
 
-        <h1>Juego de Cartas</h1>
+            <h1>SIMON DICE</h1>
 
-        <div className="board" >
-        {cards ? cards.map((card, i)=> (
-                <Card value={card} key={i} onCardClick= {() => handleClick(i) } estado= {card.mostrar}/>
-            )): "No hay cartas para mostrar"}  
-        </div>
-        
-        <h1>Pares encontrados</h1>
-        <div className="board" >
-        {cardFinish ? cardFinish.map((card, i)=> (
-                <Card value={card} key={i} estado= {card.mostrar}/>
-            )): "No hay cartas para mostrar"}  
-        </div>
+            <div className="board" >
+            {cardsHighlight ? cardsHighlight.map((card, i)=> (
+                    <Card value={card} key={i} estado= {card.brillar} />
+                )): "No hay cartas para mostrar"}  
+            </div>
+            
+            <h1>TU TURNO</h1>
+            <div className="board" >
+            {cards ? cards.map((card, i)=> (
+                    <Card value={card} key={i} onCardClick={() => handleClick(i)} estado= {card.brillar} />
+                )): "No hay cartas para mostrar"}  
+            </div>       
+
+            
 
         </div>      
     );

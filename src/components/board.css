@@ -8,3 +8,52 @@
     margin: 2em auto;
 }
 
+.buttonGame {
+
+    width:fit-content;
+    height: fit-content;
+    background-color: #fffb00;
+    color: #000000;
+    border-radius: 100px;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+}
+
+.gameBoard {
+    justify-content: center;
+    align-items:flex-start;
+    margin: 2em 2em auto ;
+    padding:  2em;
+    background-color: rgba(144, 178, 216, 0.904);
+}
+
+.h1 {
+    font-style: italic;
+    align-items: center;
+}
+
+.points {
+    width:fit-content;
+    height: fit-content;
+    background-color: #4566c0;
+    color: #000000;
+    border-radius: 90px;
+    border-color: #000000;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+}
+
+.container {
+    justify-content: space-around;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

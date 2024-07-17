@@ -1,26 +1,55 @@
 .card {
-    width: 200px;
+    width: 100px;
     height: 100px;
-    background-color: #428bca;
     color: #000000;
-    border-radius: 10px;
     padding: 20px 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size:xx-large;
-
+    border-radius: 20px;
+    border-color: #000000;
+    border-width: 0.3em;
   }
+.red {
+  background-color: red;
+}
+.blue {
+  background-color: rgb(0, 81, 255);
+}
+.green {
+  background-color: rgb(30, 255, 0);
+}
+.magenta {
+  background-color:darkmagenta;
+}
+.yellow {
+  background-color:rgb(200, 255, 0);
+}
 
   .oculto{
     visibility: hidden;
   }
   
   .card:hover {
-    background-color: #4a93d3;
+    transform: scale(1.1);
+  transition: transform 0.3s ease;
+  border: 2px solid #e03e61;
+  border-width: 0.3em;
+
+
   }
   
+  .card.highlighted {
+    border: 5px solid yellow; 
+    background-color: color-mix(in hsl shorter hue, color percentage, color percentage);
+  }
+
+  .oculto {
+    visibility: hidden;
+  }
+
   .card p,
   h2 {
     font-size: large;

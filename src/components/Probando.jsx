@@ -94,22 +94,108 @@ export default function Game() {
   );
 }
 
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+import { useEffect, useState } from "react";
+import Card from "./Card";
+import "./board.css";
+import { generateRandomColorArray, verifyCards } from "../utils/logicaSimon";
+
+const Board = () => {
+    const objectCards = [
+        { id: 0, brillar: false, value: "red" },
+        { id: 1, brillar: false, value: "yellow" },
+        { id: 2, brillar: false, value: "green" },
+        { id: 3, brillar: false, value: "blue" },
+        { id: 4, brillar: false, value: "magenta" }
+    ];
+
+    const [cards, setCards] = useState(objectCards);
+    const [cardsGame, setCardsGame] = useState([]);
+    const [cardsClicked, setCardClicked] = useState([]);
+    const [puntos, setPuntos] = useState(0);
+
+    console.log({ cards });
+    console.log({ cardsGame });
+    console.log({ cardsClicked });
+    console.log(puntos);
+
+    function handleClick(i) {
+        const cardClicked = cards[i];
+        console.log(cardClicked);
+        setCardClicked(prevClicked => [...prevClicked, cardClicked]);
     }
-  }
-  return null;
-}
+
+    function startGame() {
+        const patron = generateRandomColorArray();
+        console.log(patron);
+
+        const cardsPlay = patron.map(color => {
+            return cards.find(card => card.value === color);
+        }).filter(card => card !== undefined);
+
+        console.log(cardsPlay);
+
+        setCardsGame(cardsPlay);
+
+        let index = 0;
+        const interval = setInterval(() => {
+            if (index < cardsPlay.length) {
+                const newCards = cards.map(card => {
+                    if (card.id === cardsPlay[index].id) {
+                        return { ...card, brillar: true };
+                    }
+                    return card;
+                });
+                setCards(newCards);
+                setTimeout(() => {
+                    setCards(cards.map(card => ({ ...card, brillar: false })));
+                }, 500);
+                index++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 1000);
+    }
+
+    function clickVerifyCards() {
+        console.log(verifyCards(cardsGame, cardsClicked));
+        if (verifyCards(cardsGame, cardsClicked)) {
+            setPuntos(puntos + 1);
+        }
+        setCardClicked([]);
+    }
+
+    return (
+        <div className="gameBoard">
+            <button className="buttonGame" onClick={startGame}>Empieza el juego</button>
+            <h1>SIMON DICE</h1>
+
+            <div className="board">
+                {objectCards.map((card, i) => (
+                    <Card value={card} key={i} estado={card.brillar} />
+                ))}
+            </div>
+
+            <h1>TU TURNO</h1>
+            <div className="board">
+                {cards.map((card, i) => (
+                    <Card value={card} key={i} onCardClick={() => handleClick(i)} estado={card.brillar} />
+                ))}
+            </div>
+
+            <button className="buttonGame" onClick={clickVerifyCards}>Verificar</button>
+            <div className="points">Puntos: {puntos}</div>
+        </div>
+    );
+};
+
+
+const Card = ({ value, onCardClick, estado }) => {
+    const className = `card ${value.value} ${estado ? 'highlighted' : ''}`;
+
+    return (
+        <button className={className} onClick={onCardClick}>
+            Este
+        </button>
+    );
+};
+
